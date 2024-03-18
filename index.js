@@ -1,17 +1,24 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 const { url } = require("./models/url")
 const urlRoute = require("./routes/url")
 const { connectToDb } = require("./connection")
 
 const PORT = 200
 connectToDb("mongodb://127.0.0.1:27017/shorturl")
+.then(() => {
+    console.log("Connection successful")
+})
 
-app.use(express.json())
+app.set('view engine', 'ejs');
+app.set("views", path.resolve("./views"));
 
-app.use("/url", urlRoute)
+app.use(express.json());
 
-app.get("/:link", async (req, res) => {
+app.use("/url", urlRoute);
+
+app.get("/url/:link", async (req, res) => {
     try {
         const link = req.params.link
         const entry = await url.findOne({ shortid: link })
@@ -25,6 +32,13 @@ app.get("/:link", async (req, res) => {
     }
 });
 
-app.listen(200, () => {
+app.use("/apple", async (req, res) => {
+    const allUrl = await url.find({});
+    return res.render('home', {
+        urls: allUrl,
+    });
+});
+
+app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
 })
