@@ -1,36 +1,30 @@
-const express = require('express');
-const urlRoute = require('./routes/url')
-const {connectDB} = require('./connect')
-const {url} = require("./models/url")
+const express = require('express')
+const app = express()
+const { url } = require("./models/url")
+const urlRoute = require("./routes/url")
+const { connectToDb } = require("./connection")
 
-
-const app = express();
-const PORT = 200;
-
-connectDB('mongodb://127.0.0.1:27017/miniurl')
-.then(() => {
-    console.log('connection established');
-});
+const PORT = 200
+connectToDb("mongodb://127.0.0.1:27017/shorturl")
 
 app.use(express.json())
 
-app.use("/url", urlRoute);
+app.use("/url", urlRoute)
 
-app.get("/:shortId", async(req, res) => {
+app.get("/:link", async (req, res) => {
     try {
-        const shortId = req.params.shortId;
-        const entry = await url.findOne({ shortid:shortId });
-        if (!entry.redirectUrl) {
-            return res.status(500).send("Redirect URL is not defined for this entry");
+        const link = req.params.link
+        const entry = await url.findOne({ shortid: link })
+        if (!entry.realUrl) {
+            return res.status(404).json({ message: "Link not found" })
         }
-        res.redirect(entry.redirectUrl);
-    } catch (error) {
-        console.error("Error while fetching and redirecting:", error);
-        res.status(500).send("Internal server error");
+        res.redirect(entry.realUrl)
+    }
+    catch(err){
+        res.status(500).json({ message: err})
     }
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Started at PORT:${PORT}`)
-});
+app.listen(200, () => {
+    console.log(`listening on port ${PORT}`)
+})

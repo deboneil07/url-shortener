@@ -1,23 +1,26 @@
+const {url} = require("../models/url")
 const shortid = require("shortid")
-const {url} = require("../models/url");
-const mongoose = require("mongoose")
 
 
-generateShortUrl = async (req, res) => {
-    const body = req.body
-    if (!body.url){
-        return res.status(400).json({message: "Link not found"})
+
+const generateUrl = async (req, res) => {
+    try{
+        const body = req.body
+        if (!body.url){
+            return res.status(400).json({message: "Invalid or missing parameters"})
+        }
+        const newUrl = shortid()
+        await url.create({
+            shortid: newUrl,
+            realUrl: body.url,
+        });
+        return res.status(200).json({link: newUrl})
     }
-    const shortID = shortid();
-    await url.create({
-        shortid: shortID,
-        redirectUrl: body.url,
-        totalClicks: [],
-    })
-    return res.json({id: shortID});
+    catch(error){
+        console.log(error)
+    }
 }
 
-
 module.exports = {
-    generateShortUrl,
+    generateUrl
 }
