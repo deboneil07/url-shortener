@@ -14,7 +14,9 @@ const generateUrl = async (req, res) => {
             shortid: newUrl,
             realUrl: body.url,
         });
-        return res.status(200).json({link: newUrl})
+        return res.render("home", {
+            id: newUrl,
+        })
     }
     catch(error){
         console.log(error)

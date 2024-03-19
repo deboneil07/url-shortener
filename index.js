@@ -15,6 +15,7 @@ app.set('view engine', 'ejs');
 app.set("views", path.resolve("./views"));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false}))
 
 app.use("/url", urlRoute);
 
@@ -32,7 +33,7 @@ app.get("/url/:link", async (req, res) => {
     }
 });
 
-app.use("/apple", async (req, res) => {
+app.get("/", async (req, res) => {
     const allUrl = await url.find({});
     return res.render('home', {
         urls: allUrl,
