@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const { url } = require("./models/url")
 const urlRoute = require("./routes/url")
+const staticRoute = require("./routes/staticRouter")
 const { connectToDb } = require("./connection")
 
 const PORT = 200
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false}))
 
 app.use("/url", urlRoute);
+app.use('/', staticRoute);
 
 app.get("/url/:link", async (req, res) => {
     try {
@@ -33,12 +35,7 @@ app.get("/url/:link", async (req, res) => {
     }
 });
 
-app.get("/", async (req, res) => {
-    const allUrl = await url.find({});
-    return res.render('home', {
-        urls: allUrl,
-    });
-});
+
 
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
