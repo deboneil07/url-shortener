@@ -13,8 +13,8 @@
     <div style="display: flex; flex-direction: column; padding-top: 10vb;">
         <form action="/url" method="POST">
             <label for="">Enter Original url</label>
-            <input type="text" placeholder="https://example.com" name="url"> 
-            <button type="submit">Generate URL</button>
+            <input style="border-radius: 5px;" type="text" placeholder="https://example.com" name="url"> 
+            <button style="border-radius: 5px;" type="submit">Generate URL</button>
         </form>
         <div style="margin-top: 5vb;">
             <% if (locals.id) { %>
@@ -32,9 +32,11 @@
                     </thead>
                     <tbody>
                         <% urls.forEach((url, index) => { %>
-                            <td> &nbsp;<%= index + 1 %> </td>
-                            <td><%= url.shortid %></td>
-                            <td> &nbsp; &nbsp;<%= url.realUrl %></td>
+                            <tr>
+                                <td> &nbsp;<%= index + 1 %> </td>
+                                <td><%= url.shortid %></td>
+                                <td> &nbsp; &nbsp;<%= url.realUrl %></td>
+                            </tr>
                         <% }) %>
                     </tbody>
                 </table>
