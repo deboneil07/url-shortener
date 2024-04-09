@@ -10,6 +10,10 @@ const urlSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    users: {
+        type: mongoose.Schema.Types.UUID,
+        ref: 'users',
+    }
 });
 
 const url = mongoose.model('url', urlSchema)

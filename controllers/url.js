@@ -5,7 +5,7 @@ const shortid = require("shortid")
 
 const generateUrl = async (req, res) => {
     try{
-        const body = req.body
+        const {body} = req.body
         if (!body.url){
             return res.status(400).json({message: "Invalid or missing parameters"})
         }
